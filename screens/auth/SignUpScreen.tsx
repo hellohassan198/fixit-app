@@ -1,3 +1,5 @@
+import { Alert } from 'react-native';
+
 import React, { useState } from 'react';
 import {
   View,
@@ -18,17 +20,26 @@ const navigation = useNavigation<any>();
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
+const handleSubmit = () => {
+  if (!category) {
+   Alert.alert('Select Category', 'Please select a service category.');
+    return;
+  }
 
-  const handleSubmit = () => {
-    console.log({
-      fullName,
-      email,
-      phone,
-      category,
-      description,
+  if (category === 'provider') {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'ServiceProviderTabs' }], // 👈 Goes to provider layout
     });
-    // submit logic
-  };
+  } else if (category === 'customer') {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainTabs' }], // 👈 Goes to customer layout
+    });
+  }
+};
+
+
 
   return (
     <View style={styles.container}>

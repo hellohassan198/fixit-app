@@ -1,34 +1,33 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-// Screens
-import SignInScreen from './screens/SignInScreen';
-import SignUpScreen from './screens/SignUpScreen';
-import RegisterScreen from './screens/RegisterScreen';
-import HomeScreen from './screens/HomeScreen';
-import DashboardScreen from './screens/DashboardScreen';
-import ProviderDetailsScreen from './screens/ProviderDetailsScreen';
-import BookingConfirmationScreen from './screens/BookingConfirmationScreen';
-import BookingsScreen from './screens/BookingsScreen';
-import ReviewsScreen from './screens/ReviewsScreen'; // ✅ Your actual review form screen
+// Auth Screens
+import SignInScreen from './screens/auth/SignInScreen';
+import SignUpScreen from './screens/auth/SignUpScreen';
+import RegisterScreen from './screens/auth/RegisterScreen';
 
-// ❗ Placeholder for Profile
-const ProfileScreen = () => (
-  <View style={{ flex: 1, backgroundColor: '#0B1912', justifyContent: 'center', alignItems: 'center' }}>
-    <Text style={{ color: '#fff', fontSize: 18 }}>Profile Screen (Coming Soon)</Text>
-  </View>
-);
+// Customer Screens
+import HomeScreen from './screens/customer/HomeScreen';
+import DashboardScreen from './screens/customer/DashboardScreen';
+import ProviderDetailsScreen from './screens/customer/ProviderDetailsScreen';
+import BookingConfirmationScreen from './screens/customer/BookingConfirmationScreen';
+import BookingsScreen from './screens/customer/BookingsScreen';
+import ReviewsScreen from './screens/customer/ReviewsScreen';
+import ProfileScreen from './screens/customer/ProfileScreen';
 
-// Navigators
+// Service Provider Screens
+import ServiceProviderHomeScreen from './screens/serviceprovider/ServiceProviderHomeScreen';
+import ProviderBookingsScreen from './screens/serviceprovider/ProviderBookingsScreen';
+import JobStatusScreen from './screens/serviceprovider/JobStatusScreen';
+import ProviderProfileScreen from './screens/serviceprovider/ProviderProfileScreen';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// ✅ Bottom Tab Navigator
-const MainTabNavigator = () => (
+const CustomerTabs = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
       headerShown: false,
@@ -54,20 +53,49 @@ const MainTabNavigator = () => (
   </Tab.Navigator>
 );
 
-// ✅ Main App Entry
+// 👉 You will connect this next
+const ServiceProviderTabs = () => (
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      headerShown: false,
+      tabBarStyle: { backgroundColor: '#0B1912' },
+      tabBarIcon: ({ color, size }) => {
+        let iconName = '';
+        if (route.name === 'JobRequests') iconName = 'home';
+        else if (route.name === 'Bookings') iconName = 'calendar-outline';
+        else if (route.name === 'JobStatus') iconName = 'construct-outline';
+        else if (route.name === 'Profile') iconName = 'person-outline';
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: '#2CF269',
+      tabBarInactiveTintColor: '#ccc',
+    })}
+  >
+    <Tab.Screen name="JobRequests" component={ServiceProviderHomeScreen} />
+    <Tab.Screen name="Bookings" component={ProviderBookingsScreen} />
+    <Tab.Screen name="JobStatus" component={JobStatusScreen} />
+    <Tab.Screen name="Profile" component={ProviderProfileScreen} />
+
+
+
+    {/* Add more tabs here later like: Bookings, JobStatus, etc */}
+  </Tab.Navigator>
+);
+
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* Authentication Flow */}
+        {/* Auth */}
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
 
-        {/* Main Tabs */}
-        <Stack.Screen name="MainTabs" component={MainTabNavigator} />
+        {/* Flows */}
+        <Stack.Screen name="MainTabs" component={CustomerTabs} />
+        <Stack.Screen name="ServiceProviderTabs" component={ServiceProviderTabs} />
 
-        {/* Other Screens */}
+        {/* Extra Screens */}
         <Stack.Screen name="ProviderDetails" component={ProviderDetailsScreen} />
         <Stack.Screen name="BookingConfirmation" component={BookingConfirmationScreen} />
       </Stack.Navigator>

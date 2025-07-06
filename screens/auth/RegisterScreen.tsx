@@ -5,33 +5,26 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Platform
+  Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Picker } from '@react-native-picker/picker';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  Profile: undefined;
+};
 
 const RegisterScreen = () => {
- const navigation = useNavigation<any>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
 
   const handleSubmit = () => {
-  console.log({
-    fullName,
-    email,
-    phone,
-    category,
-    description,
-  });
-
-  // Submit logic yahan lagayein
- navigation.navigate('MainTabs');
-};
-
+    navigation.navigate('Profile');
+  };
 
   return (
     <View style={styles.container}>
@@ -39,12 +32,11 @@ const RegisterScreen = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Full  Name"
+        placeholder="Full Name"
         placeholderTextColor="#ccc"
         value={fullName}
         onChangeText={setFullName}
       />
-
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -52,29 +44,14 @@ const RegisterScreen = () => {
         value={email}
         onChangeText={setEmail}
       />
-
       <TextInput
         style={styles.input}
-        placeholder="Phone  Number"
+        placeholder="Phone Number"
         placeholderTextColor="#ccc"
         value={phone}
         onChangeText={setPhone}
         keyboardType="phone-pad"
       />
-
-      <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={category}
-          onValueChange={(itemValue) => setCategory(itemValue)}
-          style={styles.picker}
-          dropdownIconColor="#ccc"
-        >
-          <Picker.Item label="Service  Category" value="" enabled={false} />
-          <Picker.Item label="Service Provider" value="provider" />
-          <Picker.Item label="Customer" value="customer" />
-        </Picker>
-      </View>
-
       <TextInput
         style={styles.textArea}
         placeholder="Description"
@@ -84,16 +61,9 @@ const RegisterScreen = () => {
         multiline
         numberOfLines={4}
       />
-
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
-
-      {/* <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-        <Text style={styles.bottomText}>
-          Already have an account? <Text style={{ color: '#fff' }}>Log In</Text>
-        </Text>
-      </TouchableOpacity> */}
     </View>
   );
 };
@@ -121,16 +91,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginBottom: 15,
   },
-  pickerWrapper: {
-    backgroundColor: '#1E2D23',
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-  picker: {
-    color: '#fff',
-    height: Platform.OS === 'ios' ? 150 : 50,
-    width: '100%',
-  },
   textArea: {
     backgroundColor: '#1E2D23',
     padding: 15,
@@ -151,10 +111,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     fontSize: 16,
-  },
-  bottomText: {
-    color: '#ccc',
-    textAlign: 'center',
-    marginTop: 10,
   },
 });
